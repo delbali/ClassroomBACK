@@ -31,13 +31,59 @@ public class UserEntity {
 
     @Column()
     private String password;
+    
+    @Column()
+    private String firstName;
+    
+    @Column()
+    private String lastName;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",  joinColumns = @JoinColumn(name = "userid"),  inverseJoinColumns = @JoinColumn(name = "roleid")) 
     private List<RoleEntity> roles = new ArrayList<>();
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_classrooms",  joinColumns = @JoinColumn(name = "userid"),  inverseJoinColumns = @JoinColumn(name = "classroomid")) 
+    private List<ClassroomEntity> classrooms = new ArrayList<>();
 
 
-    public UserEntity() {
+    public UserEntity(Long id, String username, String password, String firstName, String lastName,
+			List<RoleEntity> roles, List<ClassroomEntity> classrooms) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.roles = roles;
+		this.classrooms = classrooms;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public List<ClassroomEntity> getClassrooms() {
+		return classrooms;
+	}
+
+	public void setClassrooms(List<ClassroomEntity> classrooms) {
+		this.classrooms = classrooms;
+	}
+
+	public UserEntity() {
     }
 
     public UserEntity(Long id, String username, String password, List<RoleEntity> roles) {

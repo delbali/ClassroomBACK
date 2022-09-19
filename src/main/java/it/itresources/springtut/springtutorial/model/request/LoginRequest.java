@@ -1,4 +1,4 @@
-package it.itresources.springtut.springtutorial.model;
+package it.itresources.springtut.springtutorial.model.request;
 
 import javax.validation.constraints.NotNull;
 

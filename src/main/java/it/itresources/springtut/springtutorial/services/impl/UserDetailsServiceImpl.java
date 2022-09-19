@@ -1,4 +1,4 @@
-package it.itresources.springtut.springtutorial.service.impl;
+package it.itresources.springtut.springtutorial.services.impl;
 
 import it.itresources.springtut.springtutorial.entity.UserEntity;
 import it.itresources.springtut.springtutorial.model.UserDetailImpl;

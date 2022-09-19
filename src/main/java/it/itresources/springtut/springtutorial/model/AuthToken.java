@@ -1,23 +1,33 @@
 package it.itresources.springtut.springtutorial.model;
 
 public class AuthToken {
-    private String token;
+    private String accesstoken;
     private String type = "Bearer";
+    private String refreshToken;
 
     public AuthToken() {
     }
 
-    public AuthToken(String token) {
-        this.token = token;
+    public String getAccesstoken() {
+		return accesstoken;
+	}
+
+	public void setAccesstoken(String accesstoken) {
+		this.accesstoken = accesstoken;
+	}
+
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
+
+	public AuthToken(String token) {
+        this.accesstoken = token;
     }
 
-    public String getToken() {
-        return this.token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public String getType() {
         return this.type;
@@ -27,22 +37,20 @@ public class AuthToken {
         this.type = type;
     }
 
-    public AuthToken token(String token) {
-        setToken(token);
-        return this;
-    }
+	public AuthToken(String accesstoken, String refreshToken) {
+		super();
+		this.accesstoken = accesstoken;
+		this.refreshToken = refreshToken;
+	}
 
-    public AuthToken type(String type) {
-        setType(type);
-        return this;
-    }
+	@Override
+	public String toString() {
+		return "AuthToken [accesstoken=" + accesstoken + ", type=" + type + ", refreshToken=" + refreshToken + "]";
+	}
 
-    @Override
-    public String toString() {
-        return "{" +
-            " token='" + getToken() + "'" +
-            ", type='" + getType() + "'" +
-            "}";
-    }
+    
+   }
 
-}
+    
+
+
