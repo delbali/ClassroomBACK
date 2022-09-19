@@ -1,8 +1,9 @@
 package it.itresources.springtut.springtutorial.security;
 
 import it.itresources.springtut.springtutorial.mapper.UserMapper;
-import it.itresources.springtut.springtutorial.model.User;
 import it.itresources.springtut.springtutorial.model.UserDetailImpl;
+import it.itresources.springtut.springtutorial.model.dto.UserDTO;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 
@@ -38,7 +39,7 @@ public class PrincipalUtils {
         return loggedUser;
     }
 
-    public static User loggerUserFromContext(SecurityContext ctx) {
+    public static UserDTO loggerUserFromContext(SecurityContext ctx) {
         return UserMapper.userDetailToDto(PrincipalUtils.loggerUserDetailsFromContext(ctx));
     }
 

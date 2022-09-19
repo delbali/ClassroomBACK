@@ -1,5 +1,6 @@
 package it.itresources.springtut.springtutorial.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +39,12 @@ public class UserEntity {
     @Column()
     private String lastName;
 
+    @Column()
+    private String address;
+    
+    @Column()
+    private LocalDate subscriptionDate;
+    
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",  joinColumns = @JoinColumn(name = "userid"),  inverseJoinColumns = @JoinColumn(name = "roleid")) 
     private List<RoleEntity> roles = new ArrayList<>();
@@ -47,14 +54,32 @@ public class UserEntity {
     private List<ClassroomEntity> classrooms = new ArrayList<>();
 
 
-    public UserEntity(Long id, String username, String password, String firstName, String lastName,
-			List<RoleEntity> roles, List<ClassroomEntity> classrooms) {
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public LocalDate getSubscriptionDate() {
+		return subscriptionDate;
+	}
+
+	public void setSubscriptionDate(LocalDate subscriptionDate) {
+		this.subscriptionDate = subscriptionDate;
+	}
+
+	public UserEntity(Long id, String username, String password, String firstName, String lastName, String address,
+			LocalDate subscriptionDate, List<RoleEntity> roles, List<ClassroomEntity> classrooms) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.address = address;
+		this.subscriptionDate = subscriptionDate;
 		this.roles = roles;
 		this.classrooms = classrooms;
 	}

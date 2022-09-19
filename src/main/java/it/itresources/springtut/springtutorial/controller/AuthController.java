@@ -19,6 +19,10 @@ import java.util.List;
 import java.util.Optional;
 
 import it.itresources.springtut.springtutorial.security.PrincipalUtils;
+import it.itresources.springtut.springtutorial.services.impl.ServiceRoleImpl;
+import it.itresources.springtut.springtutorial.services.impl.ServiceUserImpl;
+import it.itresources.springtut.springtutorial.services.impl.UserDetailsServiceImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,24 +49,27 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtUtils jwtUtils;
+    private final ServiceUserImpl serviceUserImpl;
+    private final ServiceRoleImpl serviceRoleImpl;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
+    public AuthController(ServiceRoleImpl serviceRoleImpl, ServiceUserImpl serviceUserImpl, UserDetailsServiceImpl userDetailsServiceImpl,AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
         Assert.notNull(authenticationManager, "Injected AuthenticationManager instance cannot be null!");
-        Assert.notNull(userRepository, "Injected UserRepository instance cannot be null!");
-        Assert.notNull(roleRepository, "Injected RoleRepository instance cannot be null!");
         Assert.notNull(passwordEncoder, "Injected PasswordEncoder instance cannot be null!");
         Assert.notNull(jwtUtils, "Injected JwtUtils instance cannot be null!");
+        Assert.notNull(userDetailsServiceImpl, "Injected UserDetailsServiceImpl instance cannot be null!");
+        Assert.notNull(serviceUserImpl, "Injected ServiceUserImpl instance cannot be null!");
+        Assert.notNull(serviceRoleImpl, "Injected ServiceRoleImpl instance cannot be null!");
         this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
-    }
+        this.userDetailsServiceImpl=userDetailsServiceImpl; 
+        this.serviceUserImpl=serviceUserImpl;
+        this.serviceRoleImpl=serviceRoleImpl;
+        }
 
     @PostMapping("/signin")
 	public ResponseEntity<AuthToken> authenticate(@Valid @RequestBody LoginRequest loginRequest) {
@@ -75,13 +82,6 @@ public class AuthController {
 
 		String jwtToken = tokens.get(0);
 		String jwtRefreshToken = tokens.get(1);
-
-		// UserDetailImpl userDetails = (UserDetailImpl)authentication.getPrincipal();
-		// List<String> roles = userDetails.getAuthorities().stream().map(i ->
-		// i.getAuthority()).collect(Collectors.toList());
-
-		// return ResponseEntity.created(URI.create("/persons/" +
-		// person.getName())).build();
 		
 		return ResponseEntity.ok(new AuthToken(jwtToken, jwtRefreshToken));
 	}
@@ -93,15 +93,16 @@ public class AuthController {
 		if (serviceUserImpl.checkUserExistance(signUpRequest.getUsername())) {
 			throw new UsernameAlreadyExistsException("Username already exists.");
 		}
-		LocalDate date=DateMapper.stringToDate(signUpRequest.getHiredDate());
+		
 		List<RoleEntity> roles=new ArrayList<>();
-		signUpRequest.getRoles().forEach(x->{
-			roles.add(serviceRolesImpl.findRoleByName(x).get());
+		signUpRequest.getRoles().forEach(role->{
+			roles.add(serviceRoleImpl.findRoleByName(role).get());
 		});
 		
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("DA CAMBIARE").toUriString());
-		return ResponseEntity.created(uri).body(UserMapper.entityToDto(serviceRolesImpl.registration(UserMapper.signUpToEntity(signUpRequest,date , roles, passwordEncoder.encode(signUpRequest.getPassword())))));
+		return ResponseEntity.created(uri).body(serviceUserImpl.registration(UserMapper.signupToEntity(signUpRequest, roles, passwordEncoder.encode(signUpRequest.getPassword()))));
 	}
+	
 	@PostMapping ("/refresh")
 	public ResponseEntity<?> refresh(HttpServletRequest request) {
 		logger.info("refreshing Token");

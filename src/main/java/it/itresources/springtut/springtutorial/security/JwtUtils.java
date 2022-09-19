@@ -75,7 +75,7 @@ public class JwtUtils {
     	//ciclo x verificare
     	for (String role : roleString)
     	{
-    		if (role=="ROLE_ADMIN")
+    		if (role=="ROLE_TEACHER")
     		{
     			admin=true;
     		}

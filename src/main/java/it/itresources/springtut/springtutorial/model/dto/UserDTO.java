@@ -1,16 +1,16 @@
-package it.itresources.springtut.springtutorial.model;
+package it.itresources.springtut.springtutorial.model.dto;
 
 import java.util.List;
 
-public class User {
+public class UserDTO {
     private Long id;
     private String username;
     private List<String> roles;
 
-    public User() {
+    public UserDTO() {
     }
 
-    public User(Long id, String username, List<String> roles) {
+    public UserDTO(Long id, String username, List<String> roles) {
         this.id = id;
         this.username = username;
         this.roles = roles;
@@ -40,17 +40,17 @@ public class User {
         this.roles = roles;
     }
 
-    public User id(Long id) {
+    public UserDTO id(Long id) {
         setId(id);
         return this;
     }
 
-    public User username(String username) {
+    public UserDTO username(String username) {
         setUsername(username);
         return this;
     }
 
-    public User roles(List<String> roles) {
+    public UserDTO roles(List<String> roles) {
         setRoles(roles);
         return this;
     }
