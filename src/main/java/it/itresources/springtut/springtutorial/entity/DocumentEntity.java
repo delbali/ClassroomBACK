@@ -36,11 +36,12 @@ public class DocumentEntity {
 	@Lob
 	private byte[] data;
 	
-	@Column()
-	private String uploadedBy;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserEntity creator;
 	
 	@ManyToOne
-	@JoinColumn(name = "classroom_id",nullable = false)
+	@JoinColumn(name = "classroom_id")//,nullable = false)
 	private ClassroomEntity uploadedTo;
 
 	public Long getId() {
@@ -83,13 +84,7 @@ public class DocumentEntity {
 		this.data = data;
 	}
 
-	public String getUploadedBy() {
-		return uploadedBy;
-	}
-
-	public void setUploadedBy(String uploadedBy) {
-		this.uploadedBy = uploadedBy;
-	}
+	
 
 	public ClassroomEntity getUploadedTo() {
 		return uploadedTo;
@@ -99,7 +94,9 @@ public class DocumentEntity {
 		this.uploadedTo = uploadedTo;
 	}
 
-	public DocumentEntity(Long id, String name, String type, String description, byte[] data, String uploadedBy,
+	
+
+	public DocumentEntity(Long id, String name, String type, String description, byte[] data, UserEntity creator,
 			ClassroomEntity uploadedTo) {
 		super();
 		this.id = id;
@@ -107,8 +104,16 @@ public class DocumentEntity {
 		this.type = type;
 		this.description = description;
 		this.data = data;
-		this.uploadedBy = uploadedBy;
+		this.creator = creator;
 		this.uploadedTo = uploadedTo;
+	}
+
+	public UserEntity getCreator() {
+		return creator;
+	}
+
+	public void setCreator(UserEntity creator) {
+		this.creator = creator;
 	}
 
 	public DocumentEntity() {

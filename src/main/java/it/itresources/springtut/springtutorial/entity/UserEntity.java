@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -53,7 +55,9 @@ public class UserEntity {
     @JoinTable(name = "user_classrooms",  joinColumns = @JoinColumn(name = "userid"),  inverseJoinColumns = @JoinColumn(name = "classroomid")) 
     private List<ClassroomEntity> classrooms = new ArrayList<>();
 
-
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="creator")
+    List<DocumentEntity> uploads = new ArrayList<>();
+    
 	public String getAddress() {
 		return address;
 	}

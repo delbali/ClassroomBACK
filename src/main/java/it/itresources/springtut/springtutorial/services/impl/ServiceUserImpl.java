@@ -28,4 +28,9 @@ public class ServiceUserImpl implements ServiceUser{
 	public Optional<UserEntity> registration(UserEntity newUser) {
 		return Optional.of(this.userRepository.save(newUser));
 	}
+	
+	public Optional<UserEntity> loadByUsername (String username) 
+    {              
+    	return userRepository.findByUsername(username);
+    }
 }
