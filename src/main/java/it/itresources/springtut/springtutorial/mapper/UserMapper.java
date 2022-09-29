@@ -10,6 +10,7 @@ import it.itresources.springtut.springtutorial.entity.RoleEntity;
 import it.itresources.springtut.springtutorial.entity.UserEntity;
 import it.itresources.springtut.springtutorial.model.UserDetailImpl;
 import it.itresources.springtut.springtutorial.model.dto.UserDTO;
+import it.itresources.springtut.springtutorial.model.dto.UserListDTO;
 import it.itresources.springtut.springtutorial.model.request.UserRegistrationRequest;
 
 public class UserMapper {
@@ -50,5 +51,9 @@ public class UserMapper {
     	return newUser;
     }
 
+    public static UserListDTO entityToListDTO (UserEntity user)
+    {
+    	return new UserListDTO(user.getId(), user.getUsername());
+    }
 
 }

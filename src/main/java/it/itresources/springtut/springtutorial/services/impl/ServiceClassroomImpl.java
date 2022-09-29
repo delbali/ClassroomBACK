@@ -13,18 +13,22 @@ import it.itresources.springtut.springtutorial.model.dto.ClassroomDTO;
 import it.itresources.springtut.springtutorial.model.dto.ClassroomListDTO;
 import it.itresources.springtut.springtutorial.model.request.ClassroomNewRequest;
 import it.itresources.springtut.springtutorial.entity.ClassroomEntity;
+import it.itresources.springtut.springtutorial.entity.UserEntity;
 import it.itresources.springtut.springtutorial.mapper.ClassroomMapper;
 import it.itresources.springtut.springtutorial.repository.ClassroomRepository;
+import it.itresources.springtut.springtutorial.repository.UserRepository;
 import it.itresources.springtut.springtutorial.services.ServiceClassroom;
 
 @Service
 public class ServiceClassroomImpl implements ServiceClassroom{
 	
 	private final ClassroomRepository classroomRepository;
+	private final UserRepository userRepository;
 	
-	public ServiceClassroomImpl (ClassroomRepository classroomRepository)
+	public ServiceClassroomImpl (UserRepository userRepository, ClassroomRepository classroomRepository)
 	{
 		this.classroomRepository=classroomRepository;
+		this.userRepository=userRepository;
 	}
 	
 	public Optional<ClassroomEntity> loadClassroom(Long id)
@@ -47,6 +51,42 @@ public class ServiceClassroomImpl implements ServiceClassroom{
 	public ClassroomDTO createClassroom(ClassroomNewRequest request)
 	{
 		return ClassroomMapper.entityToDTO(classroomRepository.save(ClassroomMapper.requestToEntity(request)));
+	}
+	
+	public ClassroomDTO loadDTO (Long id)
+	{
+		return ClassroomMapper.entityToDTO(loadClassroom(id).get());
+	}
+	
+	public Boolean saveStudentInClassroom(Long id, Long myId)
+	{
+		ClassroomEntity entity=loadClassroom(id).get();
+		UserEntity user=userRepository.findById(myId).get();
+		System.out.println(myId);
+		if (user.getClassrooms()!=null)
+		{
+			user.getClassrooms().add(entity);
+			userRepository.save(user);
+			System.out.println("ecchime"+entity.getSubscribers());
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public Boolean deleteStudentFromClassroom(Long id, Long myId)
+	{
+		ClassroomEntity entity=loadClassroom(id).get();
+		UserEntity user=userRepository.findById(myId).get();
+		System.out.println(myId);
+		if (user.getClassrooms()!=null)
+		{
+			user.getClassrooms().remove(entity);
+			userRepository.save(user);
+			System.out.println("ecchime"+entity.getSubscribers());
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
