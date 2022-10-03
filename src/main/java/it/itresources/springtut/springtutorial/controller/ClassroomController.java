@@ -81,6 +81,7 @@ public class ClassroomController {
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
 	public ResponseEntity<?> addMe(@PathVariable(value = "id") Long id, @PathVariable(value = "me") Long myId)
 	{
+		
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
 		if (dto.getSubscribers().containsKey(myId))
 		{
@@ -122,6 +123,29 @@ public class ClassroomController {
 		}
 	}
 	
+	@DeleteMapping("/{id}/members/{studentId}")
+	@PreAuthorize("hasRole('ROLE_TEACHER')")
+	public ResponseEntity<?> deleteOneFromClassroom(@PathVariable(value = "id") Long id, @PathVariable(value = "studentId") Long studentId)
+	{
+		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
+		if (dto.getSubscribers().containsKey(studentId))
+		{
+			if(serviceClassroomImpl.deleteStudentFromClassroom(id, studentId)==true)
+			{
+				return ResponseEntity.status(HttpStatus.CREATED).body("Student successfully deleted from the classroom");
+			} else {
+				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
+			}
+		} else if (!dto.getSubscribers().containsKey(studentId))
+		{
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("The student is not subscribed to this classroom!");
+			
+			
+		} else {
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
+		}
+	}
+	
 	@GetMapping("/{id}/members")
 	@PreAuthorize("hasRole('ROLE_TEACHER')")
 	public ResponseEntity<?> studentsList(@PathVariable(value = "id") Long id)
@@ -135,6 +159,18 @@ public class ClassroomController {
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not download the List!");
 		}
 		
+	}
+	
+	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_TEACHER')")
+	public ResponseEntity<?> deleteClassroom(@PathVariable(value = "id") Long id)
+	{
+		if (!serviceClassroomImpl.checkSubscribers(id))
+		{
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("The are still Users subscribed to this classroom");
+		}
+		serviceClassroomImpl.deleteClassroom(id);
+		return ResponseEntity.status(HttpStatus.OK).body("Classroom deleted successfully");
 	}
 
 }

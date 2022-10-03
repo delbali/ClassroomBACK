@@ -88,5 +88,17 @@ public class ServiceClassroomImpl implements ServiceClassroom{
 			return false;
 		}
 	}
-
+	public Boolean checkSubscribers (Long id)
+	{
+		if (loadClassroom(id).get().getSubscribers()==null)
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	public void deleteClassroom (Long id) {
+		
+		classroomRepository.delete(loadClassroom(id).get());
+	}
 }
