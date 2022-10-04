@@ -48,9 +48,9 @@ public class ServiceClassroomImpl implements ServiceClassroom{
 		return dtoList;
 	}
 	
-	public ClassroomDTO createClassroom(ClassroomNewRequest request)
+	public ClassroomDTO createClassroom(ClassroomNewRequest request, String creatorName)
 	{
-		return ClassroomMapper.entityToDTO(classroomRepository.save(ClassroomMapper.requestToEntity(request)));
+		return ClassroomMapper.entityToDTO(classroomRepository.save(ClassroomMapper.requestToEntity(request, creatorName)));
 	}
 	
 	public ClassroomDTO loadDTO (Long id)

@@ -7,7 +7,9 @@ import javax.validation.constraints.NotNull;
 
 public class ClassroomListDTO {
 
-	
+	@NotNull
+	private Long id;
+
 	@NotNull
 	private String title;
 	
@@ -63,14 +65,23 @@ public class ClassroomListDTO {
 		this.subscribers = subscribers;
 	}
 
-	public ClassroomListDTO(@NotNull String title, @NotNull String description, @NotNull String createdBy,
+	public ClassroomListDTO(@NotNull Long id, @NotNull String title, @NotNull String description, @NotNull String createdBy,
 			@NotNull List<String> subscribers, @NotNull String creatorName) {
 		super();
+		this.id=id;
 		this.title = title;
 		this.description = description;
 		this.createdBy = createdBy;
 		this.subscribers = subscribers;
 		this.creatorName=creatorName;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public ClassroomListDTO() {

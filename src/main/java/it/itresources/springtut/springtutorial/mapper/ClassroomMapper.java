@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import it.itresources.springtut.springtutorial.entity.UserEntity;
 import org.hibernate.mapping.Map;
 
 import it.itresources.springtut.springtutorial.entity.ClassroomEntity;
@@ -38,7 +39,8 @@ public class ClassroomMapper {
 		}
 		
 		dto.setUploads(uploads);
-		
+		dto.setCreatorName(classroom.getCreatorName());
+
 		return dto;
 		
 	}
@@ -55,20 +57,23 @@ public class ClassroomMapper {
 		dto.setDescription(classroom.getDescription());
 		dto.setSubscribers(list);
 		dto.setTitle(classroom.getTitle());
-		
+		dto.setCreatorName(classroom.getCreatorName());
+		dto.setId(classroom.getId());
 		return dto;
 		
 	}
 	
-	public static ClassroomEntity requestToEntity (ClassroomNewRequest request)
+	public static ClassroomEntity requestToEntity (ClassroomNewRequest request, String creatorName)
 	{
 		ClassroomEntity entity = new ClassroomEntity();
 		entity.setCreatedBy(request.getCreatedBy());
 		entity.setDescription(request.getDescription());
 		entity.setTitle(request.getTitle());
+		entity.setCreatorName(creatorName);
 		entity.setSubscribers(null);
 		entity.setUploads(null);
-		
+
+
 		return entity;
 	}
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import it.itresources.springtut.springtutorial.mapper.ClassroomMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,12 +67,28 @@ public class ClassroomController {
 		}
 		
 	}
+
+	@GetMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_STUDENT')")
+	public ResponseEntity<?> getClassroom(@PathVariable(value = "id") Long id)
+	{
+		ClassroomDTO dto= ClassroomMapper.entityToDTO(serviceClassroomImpl.loadClassroom(id).get());
+
+		if(dto!=null)
+		{
+			return ResponseEntity.status(HttpStatus.OK).body(dto);
+		} else {
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not get the specific Classroom Details!");
+		}
+
+	}
 	
 	@PostMapping("")
 	@PreAuthorize("hasRole('ROLE_TEACHER')")
 	public ResponseEntity<?> createClassroom(@Valid @RequestBody ClassroomNewRequest request){
-		
-		ClassroomDTO dto = serviceClassroomImpl.createClassroom(request);
+
+		String creatorName=UserMapper.getFullNameFromUsername(serviceUserImpl.loadByUsername(request.getCreatedBy()).get());
+		ClassroomDTO dto = serviceClassroomImpl.createClassroom(request, creatorName);
 		if(dto!=null)
 		{
 			return ResponseEntity.status(HttpStatus.CREATED).body(dto);

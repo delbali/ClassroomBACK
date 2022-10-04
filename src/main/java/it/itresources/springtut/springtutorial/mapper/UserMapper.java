@@ -3,6 +3,7 @@ package it.itresources.springtut.springtutorial.mapper;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import it.itresources.springtut.springtutorial.entity.ClassroomEntity;
@@ -63,4 +64,8 @@ public class UserMapper {
     	return new UserListDTO(user.getId(), user.getUsername());
     }
 
+
+    public static String getFullNameFromUsername(UserEntity user) {
+        return user.getFirstName()+""+user.getLastName();
+    }
 }

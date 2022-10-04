@@ -31,6 +31,9 @@ public class ClassroomEntity {
 	@Column()
 	private String createdBy;
 
+	@Column()
+	private String creatorName;
+
 	@ManyToMany(mappedBy="classrooms")
 	private List<UserEntity> subscribers=new ArrayList<>();
 	
@@ -39,6 +42,14 @@ public class ClassroomEntity {
     fetch=FetchType.LAZY,
     mappedBy="uploadedTo")
 	List<DocumentEntity> uploads = new ArrayList<>();
+
+	public String getCreatorName() {
+		return creatorName;
+	}
+
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
+	}
 
 	public Long getId() {
 		return id;
@@ -88,13 +99,14 @@ public class ClassroomEntity {
 		this.uploads = uploads;
 	}
 
-	public ClassroomEntity(Long id, String title, String description, String createdBy, List<UserEntity> subscribers,
+	public ClassroomEntity(Long id, String title, String description, String createdBy, String creatorName, List<UserEntity> subscribers,
 			List<DocumentEntity> uploads) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.createdBy = createdBy;
+		this.creatorName=creatorName;
 		this.subscribers = subscribers;
 		this.uploads = uploads;
 	}
