@@ -25,6 +25,16 @@ public class ClassroomDTO {
 	
 	private List<String> uploads;
 
+	private String creatorName;
+
+	public String getCreatorName() {
+		return creatorName;
+	}
+
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -66,7 +76,7 @@ public class ClassroomDTO {
 	
 
 	public ClassroomDTO(@NotNull Long id, @NotNull String title, @NotNull String description, @NotNull String createdBy,
-			List<String> subscribers, List<String> uploads) {
+			List<String> subscribers, List<String> uploads, String creatorName) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -74,6 +84,7 @@ public class ClassroomDTO {
 		this.createdBy = createdBy;
 		this.subscribers = subscribers;
 		this.uploads = uploads;
+		this.creatorName=creatorName;
 	}
 
 	public List<String> getSubscribers() {

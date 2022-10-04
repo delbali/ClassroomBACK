@@ -20,6 +20,17 @@ public class ClassroomListDTO {
 	@NotNull
 	private List<String> subscribers;
 
+	@NotNull
+	private String creatorName;
+
+	public String getCreatorName() {
+		return creatorName;
+	}
+
+	public void setCreatorName(String creatorName) {
+		this.creatorName = creatorName;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -53,12 +64,13 @@ public class ClassroomListDTO {
 	}
 
 	public ClassroomListDTO(@NotNull String title, @NotNull String description, @NotNull String createdBy,
-			@NotNull List<String> subscribers) {
+			@NotNull List<String> subscribers, @NotNull String creatorName) {
 		super();
 		this.title = title;
 		this.description = description;
 		this.createdBy = createdBy;
 		this.subscribers = subscribers;
+		this.creatorName=creatorName;
 	}
 
 	public ClassroomListDTO() {
