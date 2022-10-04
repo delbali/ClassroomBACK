@@ -20,10 +20,10 @@ public class ClassroomDTO {
 	private String createdBy;
 	
 	
-	private Map<Long, String> subscribers;
+	private List<String> subscribers;
 	
 	
-	private Map<Long, String> uploads;
+	private List<String> uploads;
 
 	public Long getId() {
 		return id;
@@ -59,8 +59,14 @@ public class ClassroomDTO {
 
 	
 
+	
+
+	
+
+	
+
 	public ClassroomDTO(@NotNull Long id, @NotNull String title, @NotNull String description, @NotNull String createdBy,
-			@NotNull Map<Long, String> subscribers, @NotNull Map<Long, String> uploads) {
+			List<String> subscribers, List<String> uploads) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -70,19 +76,19 @@ public class ClassroomDTO {
 		this.uploads = uploads;
 	}
 
-	public Map<Long, String> getSubscribers() {
+	public List<String> getSubscribers() {
 		return subscribers;
 	}
 
-	public void setSubscribers(Map<Long, String> subscribers) {
+	public void setSubscribers(List<String> subscribers) {
 		this.subscribers = subscribers;
 	}
 
-	public Map<Long, String> getUploads() {
+	public List<String> getUploads() {
 		return uploads;
 	}
 
-	public void setUploads(Map<Long, String> uploads) {
+	public void setUploads(List<String> uploads) {
 		this.uploads = uploads;
 	}
 

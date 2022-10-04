@@ -1,5 +1,6 @@
 package it.itresources.springtut.springtutorial.model.dto;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.constraints.NotNull;
@@ -17,7 +18,7 @@ public class ClassroomListDTO {
 	private String createdBy;
 	
 	@NotNull
-	private Map<Long, String> subscribers;
+	private List<String> subscribers;
 
 	public String getTitle() {
 		return title;
@@ -43,16 +44,16 @@ public class ClassroomListDTO {
 		this.createdBy = createdBy;
 	}
 
-	public Map<Long, String> getSubscribers() {
+	public List<String> getSubscribers() {
 		return subscribers;
 	}
 
-	public void setSubscribers(Map<Long, String> subscribers) {
+	public void setSubscribers(List<String> subscribers) {
 		this.subscribers = subscribers;
 	}
 
 	public ClassroomListDTO(@NotNull String title, @NotNull String description, @NotNull String createdBy,
-			@NotNull Map<Long, String> subscribers) {
+			@NotNull List<String> subscribers) {
 		super();
 		this.title = title;
 		this.description = description;

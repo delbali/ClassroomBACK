@@ -6,16 +6,23 @@ public class UserDTO {
     private Long id;
     private String username;
     private List<String> roles;
+    private String firstName;
+    private String lastName;
+    private List<String> classrooms;
 
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String username, List<String> roles) {
+    public UserDTO(Long id, String username, List<String> roles, String firstName, String lastName, List<String> classrooms ) {
         this.id = id;
         this.username = username;
         this.roles = roles;
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.classrooms=classrooms;
     }
 
+    
     public Long getId() {
         return this.id;
     }
@@ -63,5 +70,21 @@ public class UserDTO {
             ", roles='" + getRoles() + "'" +
             "}";
     }
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
     
 }

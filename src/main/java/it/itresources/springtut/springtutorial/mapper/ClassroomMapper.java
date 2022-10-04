@@ -19,21 +19,21 @@ public class ClassroomMapper {
 		dto.setCreatedBy(classroom.getCreatedBy());
 		dto.setDescription(classroom.getDescription());
 		dto.setId(classroom.getId());
-		HashMap<Long, String> subscribers = new HashMap<>();
+		List<String> subscribers = new ArrayList<>();
 		if(classroom.getSubscribers()!=null)
 		{
 			classroom.getSubscribers().forEach(entity->{
-				subscribers.put(entity.getId(), entity.getUsername());
+				subscribers.add(entity.getUsername());
 			});
 		}
 		dto.setSubscribers(subscribers);
 		dto.setTitle(classroom.getTitle());
 		
-		HashMap<Long, String> uploads = new HashMap<>();
+		List<String> uploads = new ArrayList<>();
 		if(classroom.getUploads()!=null)
 		{
 			classroom.getUploads().forEach(entity->{
-				uploads.put(entity.getId(),entity.getName());
+				uploads.add(entity.getName());
 			});
 		}
 		
@@ -46,14 +46,14 @@ public class ClassroomMapper {
 	public static ClassroomListDTO entityToListDTO(ClassroomEntity classroom)
 	{
 		ClassroomListDTO dto = new ClassroomListDTO();
-		HashMap map = new HashMap();
+		List<String> list = new ArrayList<>();
 		classroom.getSubscribers().forEach(entity->{
-			map.put(entity.getId(), entity.getUsername());
+			list.add(entity.getUsername());
 		});
 		
 		dto.setCreatedBy(classroom.getCreatedBy());
 		dto.setDescription(classroom.getDescription());
-		dto.setSubscribers(map);
+		dto.setSubscribers(list);
 		dto.setTitle(classroom.getTitle());
 		
 		return dto;

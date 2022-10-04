@@ -20,7 +20,13 @@ public class UserMapper {
             return new UserDTO();
         }
         List<String> roles = entity.getRoles().stream().map(i -> i.getName()).collect(Collectors.toList());
-        return new UserDTO(entity.getId(), entity.getUsername(), roles);
+        List<String> classrooms= new ArrayList<>();
+        
+        entity.getClassrooms().forEach(classroom->{
+        	classrooms.add(classroom.getTitle());
+        });
+        
+        return new UserDTO(entity.getId(), entity.getUsername(), roles, entity.getFirstName(), entity.getLastName(), classrooms);
     }
 
     public static UserDTO userDetailToDto(UserDetailImpl userDetail) {
@@ -30,7 +36,8 @@ public class UserMapper {
 
         List<String> roles = userDetail.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.toList());
 
-        UserDTO user = new UserDTO(userDetail.getId(), userDetail.getUsername(), roles);
+        
+        UserDTO user = new UserDTO(userDetail.getId(), userDetail.getUsername(), roles, null, null, null);
 
         return user;
     }

@@ -1,5 +1,6 @@
 package it.itresources.springtut.springtutorial.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.itresources.springtut.springtutorial.mapper.UserMapper;
 import it.itresources.springtut.springtutorial.model.dto.ClassroomDTO;
 import it.itresources.springtut.springtutorial.model.dto.ClassroomListDTO;
 import it.itresources.springtut.springtutorial.model.dto.DocumentListDTO;
+import it.itresources.springtut.springtutorial.model.dto.UserDTO;
 import it.itresources.springtut.springtutorial.model.dto.UserListDTO;
 import it.itresources.springtut.springtutorial.model.request.ClassroomNewRequest;
 import it.itresources.springtut.springtutorial.services.impl.ServiceClassroomImpl;
@@ -81,12 +84,24 @@ public class ClassroomController {
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
 	public ResponseEntity<?> addMe(@PathVariable(value = "id") Long id, @PathVariable(value = "me") Long myId)
 	{
-		
+		Boolean ok= false;
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
-		if (dto.getSubscribers().containsKey(myId))
+		List<UserDTO> userSubscribers = new ArrayList<>();
+		dto.getSubscribers().forEach(subscriber->{
+			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber).get()));
+		});
+		for (int i=0; i<=userSubscribers.size(); i++ )
+		{
+			if (userSubscribers.get(i).getId()==myId)
+			{
+				ok=true;
+				break;
+			}
+		}
+		if (ok==true)
 		{
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("You are already subscribed to this classroom");
-		} else if (!dto.getSubscribers().containsKey(myId))
+		} else if (ok==false)
 		{
 			if(serviceClassroomImpl.saveStudentInClassroom(id, myId)==true)
 			{
@@ -104,8 +119,21 @@ public class ClassroomController {
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
 	public ResponseEntity<?> deleteMe(@PathVariable(value = "id") Long id, @PathVariable(value = "me") Long myId)
 	{
+		Boolean ok=false;
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
-		if (dto.getSubscribers().containsKey(myId))
+		List<UserDTO> userSubscribers = new ArrayList<>();
+		dto.getSubscribers().forEach(subscriber->{
+			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber).get()));
+		});
+		for (int i=0; i<=userSubscribers.size(); i++ )
+		{
+			if (userSubscribers.get(i).getId()==myId)
+			{
+				ok=true;
+				break;
+			}
+		}
+		if (ok=true)
 		{
 			if(serviceClassroomImpl.deleteStudentFromClassroom(id, myId)==true)
 			{
@@ -113,7 +141,7 @@ public class ClassroomController {
 			} else {
 				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
 			}
-		} else if (!dto.getSubscribers().containsKey(myId))
+		} else if (ok=false)
 		{
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("You are not subscribed to this classroom!");
 			
@@ -127,8 +155,21 @@ public class ClassroomController {
 	@PreAuthorize("hasRole('ROLE_TEACHER')")
 	public ResponseEntity<?> deleteOneFromClassroom(@PathVariable(value = "id") Long id, @PathVariable(value = "studentId") Long studentId)
 	{
+		Boolean ok=false;
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
-		if (dto.getSubscribers().containsKey(studentId))
+		List<UserDTO> userSubscribers = new ArrayList<>();
+		dto.getSubscribers().forEach(subscriber->{
+			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber).get()));
+		});
+		for (int i=0; i<=userSubscribers.size(); i++ )
+		{
+			if (userSubscribers.get(i).getId()==studentId)
+			{
+				ok=true;
+				break;
+			}
+		}
+		if (ok=true)
 		{
 			if(serviceClassroomImpl.deleteStudentFromClassroom(id, studentId)==true)
 			{
@@ -136,7 +177,7 @@ public class ClassroomController {
 			} else {
 				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
 			}
-		} else if (!dto.getSubscribers().containsKey(studentId))
+		} else if (ok=false)
 		{
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("The student is not subscribed to this classroom!");
 			
