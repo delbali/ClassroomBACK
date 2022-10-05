@@ -20,10 +20,10 @@ public class ClassroomDTO {
 	private String createdBy;
 	
 	
-	private List<String> subscribers;
+	private List<UserDTO> subscribers;
 	
 	
-	private List<String> uploads;
+	private List<DocumentListDTO> uploads;
 
 	private String creatorName;
 
@@ -76,30 +76,30 @@ public class ClassroomDTO {
 	
 
 	public ClassroomDTO(@NotNull Long id, @NotNull String title, @NotNull String description, @NotNull String createdBy,
-			List<String> subscribers, List<String> uploads, String creatorName) {
+			List<UserDTO> subscribers, List<DocumentListDTO> uploads, String creatorName) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.createdBy = createdBy;
 		this.subscribers = subscribers;
-		this.uploads = uploads;
+		this.uploads=uploads;
 		this.creatorName=creatorName;
 	}
 
-	public List<String> getSubscribers() {
+	public List<UserDTO> getSubscribers() {
 		return subscribers;
 	}
 
-	public void setSubscribers(List<String> subscribers) {
+	public void setSubscribers(List<UserDTO> subscribers) {
 		this.subscribers = subscribers;
 	}
 
-	public List<String> getUploads() {
+	public List<DocumentListDTO> getUploads() {
 		return uploads;
 	}
 
-	public void setUploads(List<String> uploads) {
+	public void setUploads(List<DocumentListDTO> uploads) {
 		this.uploads = uploads;
 	}
 

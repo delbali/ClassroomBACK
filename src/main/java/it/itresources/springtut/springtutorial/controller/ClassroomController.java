@@ -105,7 +105,7 @@ public class ClassroomController {
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
 		List<UserDTO> userSubscribers = new ArrayList<>();
 		dto.getSubscribers().forEach(subscriber->{
-			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber).get()));
+			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber.getUsername()).get()));
 		});
 		for (int i=0; i<=userSubscribers.size(); i++ )
 		{
@@ -140,7 +140,7 @@ public class ClassroomController {
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
 		List<UserDTO> userSubscribers = new ArrayList<>();
 		dto.getSubscribers().forEach(subscriber->{
-			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber).get()));
+			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber.getUsername()).get()));
 		});
 		for (int i=0; i<=userSubscribers.size(); i++ )
 		{
@@ -176,7 +176,7 @@ public class ClassroomController {
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
 		List<UserDTO> userSubscribers = new ArrayList<>();
 		dto.getSubscribers().forEach(subscriber->{
-			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber).get()));
+			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber.getUsername()).get()));
 		});
 		for (int i=0; i<=userSubscribers.size(); i++ )
 		{

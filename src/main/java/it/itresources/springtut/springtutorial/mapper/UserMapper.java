@@ -3,10 +3,8 @@ package it.itresources.springtut.springtutorial.mapper;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import it.itresources.springtut.springtutorial.entity.ClassroomEntity;
 import it.itresources.springtut.springtutorial.entity.RoleEntity;
 import it.itresources.springtut.springtutorial.entity.UserEntity;
 import it.itresources.springtut.springtutorial.model.UserDetailImpl;

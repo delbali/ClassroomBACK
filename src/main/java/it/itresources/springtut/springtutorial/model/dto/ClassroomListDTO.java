@@ -20,7 +20,7 @@ public class ClassroomListDTO {
 	private String createdBy;
 	
 	@NotNull
-	private List<String> subscribers;
+	private List<UserDTO> subscribers;
 
 	@NotNull
 	private String creatorName;
@@ -57,16 +57,16 @@ public class ClassroomListDTO {
 		this.createdBy = createdBy;
 	}
 
-	public List<String> getSubscribers() {
+	public List<UserDTO> getSubscribers() {
 		return subscribers;
 	}
 
-	public void setSubscribers(List<String> subscribers) {
+	public void setSubscribers(List<UserDTO> subscribers) {
 		this.subscribers = subscribers;
 	}
 
 	public ClassroomListDTO(@NotNull Long id, @NotNull String title, @NotNull String description, @NotNull String createdBy,
-			@NotNull List<String> subscribers, @NotNull String creatorName) {
+			@NotNull List<UserDTO> subscribers, @NotNull String creatorName) {
 		super();
 		this.id=id;
 		this.title = title;

@@ -5,11 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import it.itresources.springtut.springtutorial.entity.UserEntity;
+import it.itresources.springtut.springtutorial.model.dto.*;
 import org.hibernate.mapping.Map;
 
 import it.itresources.springtut.springtutorial.entity.ClassroomEntity;
-import it.itresources.springtut.springtutorial.model.dto.ClassroomDTO;
-import it.itresources.springtut.springtutorial.model.dto.ClassroomListDTO;
 import it.itresources.springtut.springtutorial.model.request.ClassroomNewRequest;
 
 public class ClassroomMapper {
@@ -20,21 +19,21 @@ public class ClassroomMapper {
 		dto.setCreatedBy(classroom.getCreatedBy());
 		dto.setDescription(classroom.getDescription());
 		dto.setId(classroom.getId());
-		List<String> subscribers = new ArrayList<>();
+		List<UserDTO> subscribers = new ArrayList<>();
 		if(classroom.getSubscribers()!=null)
 		{
 			classroom.getSubscribers().forEach(entity->{
-				subscribers.add(entity.getUsername());
+				subscribers.add(UserMapper.entityToDto(entity));
 			});
 		}
 		dto.setSubscribers(subscribers);
 		dto.setTitle(classroom.getTitle());
 		
-		List<String> uploads = new ArrayList<>();
+		List<DocumentListDTO> uploads = new ArrayList<>();
 		if(classroom.getUploads()!=null)
 		{
 			classroom.getUploads().forEach(entity->{
-				uploads.add(entity.getName());
+				uploads.add(DocumentMapper.entityToListDTO(entity));
 			});
 		}
 		
@@ -48,9 +47,9 @@ public class ClassroomMapper {
 	public static ClassroomListDTO entityToListDTO(ClassroomEntity classroom)
 	{
 		ClassroomListDTO dto = new ClassroomListDTO();
-		List<String> list = new ArrayList<>();
+		List<UserDTO> list = new ArrayList<>();
 		classroom.getSubscribers().forEach(entity->{
-			list.add(entity.getUsername());
+			list.add(UserMapper.entityToDto(entity));
 		});
 		
 		dto.setCreatedBy(classroom.getCreatedBy());
