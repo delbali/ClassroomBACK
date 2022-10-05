@@ -35,7 +35,7 @@ public class JwtTokenAuthOncePerRequestFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         logger.debug("executing JWT per request Filter");
         String jwt = parseJwtFromRequest(httpServletRequest);
-
+    System.out.println("jwt"+ jwt);
         if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
             String username = jwtUtils.getUsernameFromToken(jwt);
 

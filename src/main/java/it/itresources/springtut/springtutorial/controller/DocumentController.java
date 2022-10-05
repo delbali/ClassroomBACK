@@ -1,7 +1,9 @@
 package it.itresources.springtut.springtutorial.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -65,18 +67,19 @@ public class DocumentController {
 	
 	@GetMapping("/{documentId}")
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
-	public ResponseEntity<?> download(@PathVariable(value = "id") Long id, @PathVariable(value="documentId") Long documentId)
-	{
-		DocumentEntity document=serviceDocumentImpl.downloadDocument(documentId).get();
-		if (document!=null)
-		{
-			return ResponseEntity.status(HttpStatus.OK).body(DocumentMapper.entityToDTO(document));
-			
-		}else {
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not download the file!");
+	public void download(@PathVariable(value = "id") Long id, @PathVariable(value="documentId") Long documentId, HttpServletResponse response) {
+		DocumentEntity document = serviceDocumentImpl.downloadDocument(documentId).get();
+		if (document != null) {
+			try {
+				response.getOutputStream().write(document.getData());
+				response.flushBuffer();
+			} catch (IOException e) {
+
+			}
 		}
-		
 	}
+		
+
 	@GetMapping("")
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
 	public ResponseEntity<?> downloadDocumentsList(@PathVariable(value = "id") Long id)

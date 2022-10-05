@@ -12,15 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import it.itresources.springtut.springtutorial.mapper.UserMapper;
 import it.itresources.springtut.springtutorial.model.dto.ClassroomDTO;
@@ -97,17 +89,22 @@ public class ClassroomController {
 		}
 	}
 	
-	@PostMapping("/{id}/members/{me}")
+	@PostMapping ("/{id}/members/{me}")
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
 	public ResponseEntity<?> addMe(@PathVariable(value = "id") Long id, @PathVariable(value = "me") Long myId)
 	{
+		if (serviceUserImpl.checkIfTeacher(myId))
+		{
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Teacher can not subscribe to classrooms!");
+		}
+		System.out.println("ao");
 		Boolean ok= false;
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
 		List<UserDTO> userSubscribers = new ArrayList<>();
 		dto.getSubscribers().forEach(subscriber->{
 			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber.getUsername()).get()));
 		});
-		for (int i=0; i<=userSubscribers.size(); i++ )
+		for (int i=0; i<userSubscribers.size(); i++)
 		{
 			if (userSubscribers.get(i).getId()==myId)
 			{
@@ -122,7 +119,7 @@ public class ClassroomController {
 		{
 			if(serviceClassroomImpl.saveStudentInClassroom(id, myId)==true)
 			{
-				return ResponseEntity.status(HttpStatus.CREATED).body("You have been successfully added to the classroom");
+				return ResponseEntity.status(HttpStatus.CREATED).body(ClassroomMapper.entityToDTO(serviceClassroomImpl.loadClassroom(id).get()));
 			} else {
 				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
 			}
@@ -136,13 +133,14 @@ public class ClassroomController {
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
 	public ResponseEntity<?> deleteMe(@PathVariable(value = "id") Long id, @PathVariable(value = "me") Long myId)
 	{
+		System.out.println("hemlos");
 		Boolean ok=false;
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
 		List<UserDTO> userSubscribers = new ArrayList<>();
 		dto.getSubscribers().forEach(subscriber->{
 			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber.getUsername()).get()));
 		});
-		for (int i=0; i<=userSubscribers.size(); i++ )
+		for (int i=0; i<userSubscribers.size(); i++ )
 		{
 			if (userSubscribers.get(i).getId()==myId)
 			{
@@ -154,7 +152,7 @@ public class ClassroomController {
 		{
 			if(serviceClassroomImpl.deleteStudentFromClassroom(id, myId)==true)
 			{
-				return ResponseEntity.status(HttpStatus.CREATED).body("You have been successfully deleted from the classroom");
+				return ResponseEntity.status(HttpStatus.CREATED).body(ClassroomMapper.entityToDTO(serviceClassroomImpl.loadClassroom(id).get()));
 			} else {
 				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
 			}
@@ -168,7 +166,7 @@ public class ClassroomController {
 		}
 	}
 	
-	@DeleteMapping("/{id}/members/{studentId}")
+	@PutMapping("/{id}/members/{studentId}")
 	@PreAuthorize("hasRole('ROLE_TEACHER')")
 	public ResponseEntity<?> deleteOneFromClassroom(@PathVariable(value = "id") Long id, @PathVariable(value = "studentId") Long studentId)
 	{
@@ -178,7 +176,7 @@ public class ClassroomController {
 		dto.getSubscribers().forEach(subscriber->{
 			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber.getUsername()).get()));
 		});
-		for (int i=0; i<=userSubscribers.size(); i++ )
+		for (int i=0; i<userSubscribers.size(); i++ )
 		{
 			if (userSubscribers.get(i).getId()==studentId)
 			{
@@ -190,7 +188,7 @@ public class ClassroomController {
 		{
 			if(serviceClassroomImpl.deleteStudentFromClassroom(id, studentId)==true)
 			{
-				return ResponseEntity.status(HttpStatus.CREATED).body("Student successfully deleted from the classroom");
+				return ResponseEntity.status(HttpStatus.CREATED).body(ClassroomMapper.entityToDTO(serviceClassroomImpl.loadClassroom(id).get()));
 			} else {
 				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
 			}
