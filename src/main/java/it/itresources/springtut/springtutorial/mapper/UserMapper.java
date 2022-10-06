@@ -64,6 +64,8 @@ public class UserMapper {
 
 
     public static String getFullNameFromUsername(UserEntity user) {
-        return user.getFirstName()+""+user.getLastName();
+        String fullName=user.getFirstName()+" "+user.getLastName();
+        System.out.println(fullName);
+        return fullName;
     }
 }

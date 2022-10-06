@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,16 +54,16 @@ public class DocumentController {
 	@PostMapping("")
 	@PreAuthorize("hasRole('ROLE_TEACHER')")
 	public ResponseEntity<?> upload(@ModelAttribute FileUploadRequest request,
-			@PathVariable(value = "id") Long id)
+			@PathVariable(value = "id") Long id, ModelMap modelmap)
 	{
+		System.out.println(request.getFile());
+		modelmap.addAttribute("request", request);
 		if (serviceDocumentImpl.teacherUpload(request, id))
 		{
-			return ResponseEntity.status(HttpStatus.CREATED).body("Uploaded the file successfully: " + request.getFile().getOriginalFilename() + " !");
+			return ResponseEntity.ok().body("Uploaded the file successfully: " + request.getFile().getOriginalFilename() + " !");
 		} else {
-		
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not upload the file: " + request.getFile().getOriginalFilename() + " !");
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not upload the file ");
 		}
-		
 	}
 	
 	@GetMapping("/{documentId}")
@@ -78,7 +79,6 @@ public class DocumentController {
 			}
 		}
 	}
-		
 
 	@GetMapping("")
 	@PreAuthorize("hasRole('ROLE_STUDENT')")

@@ -188,7 +188,7 @@ public class ClassroomController {
 		{
 			if(serviceClassroomImpl.deleteStudentFromClassroom(id, studentId)==true)
 			{
-				return ResponseEntity.status(HttpStatus.CREATED).body(ClassroomMapper.entityToDTO(serviceClassroomImpl.loadClassroom(id).get()));
+				return ResponseEntity.ok().body(ClassroomMapper.entityToDTO(serviceClassroomImpl.loadClassroom(id).get()));
 			} else {
 				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
 			}
@@ -226,7 +226,6 @@ public class ClassroomController {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("The are still Users subscribed to this classroom");
 		}
 		serviceClassroomImpl.deleteClassroom(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Classroom deleted successfully");
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-
 }

@@ -8,7 +8,6 @@ public class FileUploadRequest {
 	
 	@NotNull
 	private MultipartFile file;
-	
 	@NotNull
 	private String username;
 	

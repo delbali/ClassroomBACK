@@ -99,6 +99,6 @@ public class ServiceClassroomImpl implements ServiceClassroom{
 	
 	public void deleteClassroom (Long id) {
 		
-		classroomRepository.delete(loadClassroom(id).get());
+		classroomRepository.deleteById(id);
 	}
 }
