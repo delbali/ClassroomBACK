@@ -214,7 +214,37 @@ public class ClassroomController {
 		} else {
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not download the List!");
 		}
-		
+	}
+
+	@GetMapping("/{id}/nonmembers")
+	@PreAuthorize("hasRole('ROLE_TEACHER')")
+	public ResponseEntity<?> getUnsubscribedStudents(@PathVariable(value = "id") Long id)
+	{
+		List<UserListDTO> subscribed = serviceUserImpl.userList(id);
+		List<UserListDTO> students= new ArrayList<>();
+		serviceUserImpl.getAllStudents().get().forEach(student->{
+			students.add(UserMapper.entityToListDTO(student));
+		});
+
+		if (students!=null)
+		{
+			subscribed.forEach(student->{
+				for (int i=0; i<students.size(); i++)
+				{
+					if (student.getId()==students.get(i).getId())
+					{
+						students.remove(student);
+					}
+				}
+			});
+		}
+
+		if(students!=null)
+		{
+			return ResponseEntity.status(HttpStatus.OK).body(students);
+		} else {
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not download the List!");
+		}
 	}
 	
 	@DeleteMapping("/{id}")

@@ -59,7 +59,7 @@ public class UserMapper {
 
     public static UserListDTO entityToListDTO (UserEntity user)
     {
-    	return new UserListDTO(user.getId(), user.getUsername());
+    	return new UserListDTO(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName());
     }
 
 

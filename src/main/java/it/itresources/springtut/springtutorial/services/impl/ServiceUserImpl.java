@@ -33,6 +33,7 @@ public class ServiceUserImpl implements ServiceUser {
 		return check;
 	}
 
+	public Optional<List<UserEntity>> getAllStudents(){return Optional.of(userRepository.findAll());}
 	public Optional<UserEntity> registration(UserEntity newUser) {
 		return Optional.of(this.userRepository.save(newUser));
 	}
