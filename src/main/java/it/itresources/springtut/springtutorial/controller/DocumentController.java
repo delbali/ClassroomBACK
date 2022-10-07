@@ -60,7 +60,7 @@ public class DocumentController {
 		modelmap.addAttribute("request", request);
 		if (serviceDocumentImpl.teacherUpload(request, id))
 		{
-			return ResponseEntity.ok().body("Uploaded the file successfully: " + request.getFile().getOriginalFilename() + " !");
+			return ResponseEntity.ok().build();
 		} else {
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not upload the file ");
 		}

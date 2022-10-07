@@ -5,7 +5,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import it.itresources.springtut.springtutorial.entity.ClassroomEntity;
+import it.itresources.springtut.springtutorial.entity.RoleEntity;
+import it.itresources.springtut.springtutorial.entity.UserEntity;
 import it.itresources.springtut.springtutorial.mapper.ClassroomMapper;
+import it.itresources.springtut.springtutorial.services.impl.ServiceRoleImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +37,15 @@ public class ClassroomController {
 	private final ServiceClassroomImpl serviceClassroomImpl;
 	private final ServiceDocumentImpl serviceDocumentImpl;
 	private final ServiceUserImpl serviceUserImpl;
-	
+
+	private final ServiceRoleImpl serviceRoleImpl;
+
 	private static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
 	
 	@Autowired
-	public ClassroomController (ServiceUserImpl serviceUserImpl, ServiceClassroomImpl serviceClassroomImpl, ServiceDocumentImpl serviceDocumentImpl)
+	public ClassroomController (ServiceRoleImpl serviceRoleImpl, ServiceUserImpl serviceUserImpl, ServiceClassroomImpl serviceClassroomImpl, ServiceDocumentImpl serviceDocumentImpl)
 	{
+		this.serviceRoleImpl = serviceRoleImpl;
 		this.serviceClassroomImpl=serviceClassroomImpl;
 		this.serviceDocumentImpl=serviceDocumentImpl;
 		this.serviceUserImpl=serviceUserImpl;
@@ -89,7 +96,7 @@ public class ClassroomController {
 		}
 	}
 	
-	@PostMapping ("/{id}/members/{me}")
+	@PutMapping ("/{id}/members/{me}")
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
 	public ResponseEntity<?> addMe(@PathVariable(value = "id") Long id, @PathVariable(value = "me") Long myId)
 	{
@@ -165,13 +172,67 @@ public class ClassroomController {
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
 		}
 	}
-	
-	@PutMapping("/{id}/members/{studentId}")
+
+	@PostMapping ("/{id}/members/{studentId}")
 	@PreAuthorize("hasRole('ROLE_TEACHER')")
-	public ResponseEntity<?> deleteOneFromClassroom(@PathVariable(value = "id") Long id, @PathVariable(value = "studentId") Long studentId)
+	public ResponseEntity<?> addOneToClassroom (@PathVariable(value = "id") Long id, @PathVariable(value = "studentId") Long myId, @Valid @RequestHeader String teacherUsername)
 	{
-		Boolean ok=false;
+		if (serviceUserImpl.checkIfTeacher(myId))
+		{
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Teacher can not subscribe to classrooms!");
+		}
+
 		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
+		System.out.println("TEACHER USERNAME: " +teacherUsername);
+		System.out.println("CREATOR USERNAME: "+dto.getCreatedBy());
+		Boolean ok=false;
+
+		if (!dto.getCreatedBy().contains(teacherUsername))
+		{
+			return ResponseEntity.badRequest().build();
+		}
+		List<UserDTO> userSubscribers = new ArrayList<>();
+		dto.getSubscribers().forEach(subscriber->{
+			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber.getUsername()).get()));
+		});
+		for (int i=0; i<userSubscribers.size(); i++)
+		{
+			if (userSubscribers.get(i).getId()==myId)
+			{
+				ok=true;
+				break;
+			}
+		}
+		if (ok==true)
+		{
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("User is already subscribed to this classroom");
+		} else if (ok==false)
+		{
+			if(serviceClassroomImpl.saveStudentInClassroom(id, myId)==true)
+			{
+				return ResponseEntity.status(HttpStatus.CREATED).body(ClassroomMapper.entityToDTO(serviceClassroomImpl.loadClassroom(id).get()));
+			} else {
+				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
+			}
+
+		} else {
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("There was a problem processing your request");
+		}
+	}
+
+	@GetMapping("/{id}/members/{studentId}")
+	@PreAuthorize("hasRole('ROLE_TEACHER')")
+	public ResponseEntity<?> deleteOneFromClassroom(@PathVariable(value = "id") Long id, @PathVariable(value = "studentId") Long studentId, @Valid @RequestHeader String teacherUsername)
+	{
+		ClassroomDTO dto = serviceClassroomImpl.loadDTO(id);
+		System.out.println("TEACHER USERNAME: " +teacherUsername);
+		System.out.println("CREATOR USERNAME: "+dto.getCreatedBy());
+		Boolean ok=false;
+
+		if (!dto.getCreatedBy().contains(teacherUsername))
+		{
+			return ResponseEntity.badRequest().build();
+		}
 		List<UserDTO> userSubscribers = new ArrayList<>();
 		dto.getSubscribers().forEach(subscriber->{
 			userSubscribers.add(UserMapper.entityToDto(serviceUserImpl.loadByUsername(subscriber.getUsername()).get()));
@@ -220,24 +281,21 @@ public class ClassroomController {
 	@PreAuthorize("hasRole('ROLE_TEACHER')")
 	public ResponseEntity<?> getUnsubscribedStudents(@PathVariable(value = "id") Long id)
 	{
-		List<UserListDTO> subscribed = serviceUserImpl.userList(id);
-		List<UserListDTO> students= new ArrayList<>();
-		serviceUserImpl.getAllStudents().get().forEach(student->{
-			students.add(UserMapper.entityToListDTO(student));
+		List<UserEntity> allStudents = serviceUserImpl.getAllStudents().get();
+		List<UserDTO> students = new ArrayList<>();
+		ClassroomEntity classroom= serviceClassroomImpl.loadClassroom(id).get();
+
+		RoleEntity teacherRole = serviceRoleImpl.findRoleByName("ROLE_TEACHER").get();
+
+		allStudents.forEach(student->{
+			if (!student.getRoles().contains(teacherRole))
+			{
+				if (!student.getClassrooms().contains(classroom)) {
+					students.add(UserMapper.entityToDto(student));
+				}
+			}
 		});
 
-		if (students!=null)
-		{
-			subscribed.forEach(student->{
-				for (int i=0; i<students.size(); i++)
-				{
-					if (student.getId()==students.get(i).getId())
-					{
-						students.remove(student);
-					}
-				}
-			});
-		}
 
 		if(students!=null)
 		{
