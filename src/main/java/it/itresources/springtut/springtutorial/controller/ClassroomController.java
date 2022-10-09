@@ -307,11 +307,15 @@ public class ClassroomController {
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('ROLE_TEACHER')")
-	public ResponseEntity<?> deleteClassroom(@PathVariable(value = "id") Long id)
+	public ResponseEntity<?> deleteClassroom(@PathVariable(value = "id") Long id, @Valid @RequestHeader String teacherUsername)
 	{
 		if (!serviceClassroomImpl.checkSubscribers(id))
 		{
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("The are still Users subscribed to this classroom");
+		}
+		if (ClassroomMapper.entityToDTO(serviceClassroomImpl.loadClassroom(id).get()).getCreatedBy()==teacherUsername)
+		{
+			return ResponseEntity.badRequest().build();
 		}
 		serviceClassroomImpl.deleteClassroom(id);
 		return ResponseEntity.status(HttpStatus.OK).build();
