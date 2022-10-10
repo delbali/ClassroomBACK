@@ -9,7 +9,9 @@ import it.itresources.springtut.springtutorial.entity.ClassroomEntity;
 import it.itresources.springtut.springtutorial.entity.RoleEntity;
 import it.itresources.springtut.springtutorial.entity.UserEntity;
 import it.itresources.springtut.springtutorial.mapper.ClassroomMapper;
-import it.itresources.springtut.springtutorial.services.impl.ServiceRoleImpl;
+import it.itresources.springtut.springtutorial.mapper.GradeMapper;
+import it.itresources.springtut.springtutorial.model.dto.*;
+import it.itresources.springtut.springtutorial.services.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import it.itresources.springtut.springtutorial.mapper.UserMapper;
-import it.itresources.springtut.springtutorial.model.dto.ClassroomDTO;
-import it.itresources.springtut.springtutorial.model.dto.ClassroomListDTO;
-import it.itresources.springtut.springtutorial.model.dto.DocumentListDTO;
-import it.itresources.springtut.springtutorial.model.dto.UserDTO;
-import it.itresources.springtut.springtutorial.model.dto.UserListDTO;
 import it.itresources.springtut.springtutorial.model.request.ClassroomNewRequest;
-import it.itresources.springtut.springtutorial.services.impl.ServiceClassroomImpl;
-import it.itresources.springtut.springtutorial.services.impl.ServiceDocumentImpl;
-import it.itresources.springtut.springtutorial.services.impl.ServiceUserImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -37,14 +31,15 @@ public class ClassroomController {
 	private final ServiceClassroomImpl serviceClassroomImpl;
 	private final ServiceDocumentImpl serviceDocumentImpl;
 	private final ServiceUserImpl serviceUserImpl;
-
+	private final ServiceGradeImpl serviceGradeImpl;
 	private final ServiceRoleImpl serviceRoleImpl;
 
 	private static final Logger logger = LoggerFactory.getLogger(DocumentController.class);
 	
 	@Autowired
-	public ClassroomController (ServiceRoleImpl serviceRoleImpl, ServiceUserImpl serviceUserImpl, ServiceClassroomImpl serviceClassroomImpl, ServiceDocumentImpl serviceDocumentImpl)
+	public ClassroomController (ServiceGradeImpl serviceGradeImpl, ServiceRoleImpl serviceRoleImpl, ServiceUserImpl serviceUserImpl, ServiceClassroomImpl serviceClassroomImpl, ServiceDocumentImpl serviceDocumentImpl)
 	{
+		this.serviceGradeImpl=serviceGradeImpl;
 		this.serviceRoleImpl = serviceRoleImpl;
 		this.serviceClassroomImpl=serviceClassroomImpl;
 		this.serviceDocumentImpl=serviceDocumentImpl;
@@ -72,7 +67,11 @@ public class ClassroomController {
 	public ResponseEntity<?> getClassroom(@PathVariable(value = "id") Long id)
 	{
 		ClassroomDTO dto= ClassroomMapper.entityToDTO(serviceClassroomImpl.loadClassroom(id).get());
-
+		List<GradeDTO> grades=new ArrayList<>();
+		serviceGradeImpl.getGrades(id).forEach(entity->{
+			grades.add(GradeMapper.entityToDto(entity));
+		});
+		dto.setGrades(grades);
 		if(dto!=null)
 		{
 			return ResponseEntity.status(HttpStatus.OK).body(dto);

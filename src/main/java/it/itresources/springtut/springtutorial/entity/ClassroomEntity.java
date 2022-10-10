@@ -17,103 +17,117 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "classrooms")
 public class ClassroomEntity {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column()
-	private String title;
-	
-	@Column()
-	private String description;
-	
-	@Column()
-	private String createdBy;
 
-	@Column()
-	private String creatorName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToMany(mappedBy="classrooms")
-	private List<UserEntity> subscribers=new ArrayList<>();
-	
-	@OneToMany
-	(cascade=CascadeType.ALL,
-    fetch=FetchType.LAZY,
-    mappedBy="uploadedTo")
-	List<DocumentEntity> uploads = new ArrayList<>();
+    @Column()
+    private String title;
 
-	public String getCreatorName() {
-		return creatorName;
-	}
+    @Column()
+    private String description;
 
-	public void setCreatorName(String creatorName) {
-		this.creatorName = creatorName;
-	}
+    @Column()
+    private String createdBy;
 
-	public Long getId() {
-		return id;
-	}
+    @Column()
+    private String creatorName;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @ManyToMany(mappedBy = "classrooms")
+    private List<UserEntity> subscribers = new ArrayList<>();
 
-	public String getTitle() {
-		return title;
-	}
+    @OneToMany
+            (cascade = CascadeType.ALL,
+                    fetch = FetchType.LAZY,
+                    mappedBy = "uploadedTo")
+    List<DocumentEntity> uploads = new ArrayList<>();
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    @OneToMany
+            (cascade = CascadeType.ALL,
+                    fetch = FetchType.LAZY,
+                    mappedBy = "classroom")
+    List<GradeEntity> grades = new ArrayList<>();
 
-	public String getDescription() {
-		return description;
-	}
+    public List<GradeEntity> getGrades() {
+        return grades;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setGrades(List<GradeEntity> grades) {
+        this.grades = grades;
+    }
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
+    public String getCreatorName() {
+        return creatorName;
+    }
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
 
-	public List<UserEntity> getSubscribers() {
-		return subscribers;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setSubscribers(List<UserEntity> subscribers) {
-		this.subscribers = subscribers;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public List<DocumentEntity> getUploads() {
-		return uploads;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setUploads(List<DocumentEntity> uploads) {
-		this.uploads = uploads;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public ClassroomEntity(Long id, String title, String description, String createdBy, String creatorName, List<UserEntity> subscribers,
-			List<DocumentEntity> uploads) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.createdBy = createdBy;
-		this.creatorName=creatorName;
-		this.subscribers = subscribers;
-		this.uploads = uploads;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public ClassroomEntity() {
-		super();
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public List<UserEntity> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(List<UserEntity> subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    public List<DocumentEntity> getUploads() {
+        return uploads;
+    }
+
+    public void setUploads(List<DocumentEntity> uploads) {
+        this.uploads = uploads;
+    }
+
+    public ClassroomEntity(Long id, String title, String description, String createdBy, String creatorName, List<UserEntity> subscribers,
+                           List<DocumentEntity> uploads) {
+        super();
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.createdBy = createdBy;
+        this.creatorName = creatorName;
+        this.subscribers = subscribers;
+        this.uploads = uploads;
+    }
+
+    public ClassroomEntity() {
+        super();
+    }
+
+
 }

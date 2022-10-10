@@ -10,6 +10,34 @@ public class UserDTO {
     private String lastName;
     private List<String> classrooms;
 
+    private Long[] grades;
+
+    public List<String> getClassrooms() {
+        return classrooms;
+    }
+
+    public UserDTO(Long id, String username, List<String> roles, String firstName, String lastName, List<String> classrooms, Long[] grades) {
+        this.id = id;
+        this.username = username;
+        this.roles = roles;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.classrooms = classrooms;
+        this.grades = grades;
+    }
+
+    public void setClassrooms(List<String> classrooms) {
+        this.classrooms = classrooms;
+    }
+
+    public Long[] getGrades() {
+        return grades;
+    }
+
+    public void setGrades(Long[] grades) {
+        this.grades = grades;
+    }
+
     public UserDTO() {
     }
 

@@ -18,11 +18,30 @@ public class ClassroomDTO {
 	
 	@NotNull
 	private String createdBy;
-	
-	
+
 	private List<UserDTO> subscribers;
-	
-	
+
+	private List<GradeDTO> grades;
+
+	public ClassroomDTO(Long id, String title, String description, String createdBy, List<UserDTO> subscribers, List<GradeDTO> grades, List<DocumentListDTO> uploads, String creatorName) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.createdBy = createdBy;
+		this.subscribers = subscribers;
+		this.grades = grades;
+		this.uploads = uploads;
+		this.creatorName = creatorName;
+	}
+
+	public List<GradeDTO> getGrades() {
+		return grades;
+	}
+
+	public void setGrades(List<GradeDTO> grades) {
+		this.grades = grades;
+	}
+
 	private List<DocumentListDTO> uploads;
 
 	private String creatorName;

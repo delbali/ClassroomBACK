@@ -57,6 +57,9 @@ public class UserEntity {
 
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="creator")
     List<DocumentEntity> uploads = new ArrayList<>();
+
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="student")
+    List<GradeEntity> grades = new ArrayList<>();
     
 	public String getAddress() {
 		return address;
@@ -88,7 +91,37 @@ public class UserEntity {
 		this.classrooms = classrooms;
 	}
 
-	public String getFirstName() {
+    public List<DocumentEntity> getUploads() {
+        return uploads;
+    }
+
+    public void setUploads(List<DocumentEntity> uploads) {
+        this.uploads = uploads;
+    }
+
+    public List<GradeEntity> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(List<GradeEntity> grades) {
+        this.grades = grades;
+    }
+
+    public UserEntity(Long id, String username, String password, String firstName, String lastName, String address, LocalDate subscriptionDate, List<RoleEntity> roles, List<ClassroomEntity> classrooms, List<DocumentEntity> uploads, List<GradeEntity> grades) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.subscriptionDate = subscriptionDate;
+        this.roles = roles;
+        this.classrooms = classrooms;
+        this.uploads = uploads;
+        this.grades = grades;
+    }
+
+    public String getFirstName() {
 		return firstName;
 	}
 

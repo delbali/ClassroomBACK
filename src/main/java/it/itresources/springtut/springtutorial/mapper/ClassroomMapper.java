@@ -40,6 +40,14 @@ public class ClassroomMapper {
 		dto.setUploads(uploads);
 		dto.setCreatorName(classroom.getCreatorName());
 
+		List<GradeDTO> grades= new ArrayList<>();
+		if (classroom.getGrades()!=null)
+		{
+			classroom.getGrades().forEach(entity->{
+				grades.add(GradeMapper.entityToDto(entity));
+			});
+		}
+		dto.setGrades(grades);
 		return dto;
 		
 	}
