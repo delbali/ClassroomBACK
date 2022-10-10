@@ -78,17 +78,26 @@ public class UserMapper {
         profile.setFirstName(user.getFirstName());
         profile.setLastName(user.getLastName());
         profile.setUsername(user.getUsername());
-        List<String> classrooms=new ArrayList<>();
-        user.getClassrooms().forEach(entity->{
-            classrooms.add(entity.getTitle());
-        });
-        profile.setClassrooms(classrooms);
 
         List<String> roles=new ArrayList<>();
         user.getRoles().forEach(entity->{
             roles.add(entity.getName());
         });
 
+        if (!roles.contains("ROLE_TEACHER"))
+        {
+            List<String> classrooms=new ArrayList<>();
+            user.getClassrooms().forEach(entity->{
+                classrooms.add(entity.getTitle());
+            });
+            profile.setClassrooms(classrooms);
+            profile.setRoles(roles);
+        } else if (roles.contains("ROLE_TEACHER"))
+        {
+            List<String> classrooms=new ArrayList<>();
+            profile.setRoles(roles);
+            profile.setClassrooms(null);
+        }
         profile.setSubscriptionDate(DateMapper.dateToString(user.getSubscriptionDate()));
         return profile;
     }

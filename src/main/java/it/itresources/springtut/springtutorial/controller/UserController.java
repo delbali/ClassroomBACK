@@ -54,6 +54,10 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public ResponseEntity<?> getProfile(@PathVariable(value="id") Long id) {
         UserProfileDTO myProfile = UserMapper.entityToProfile(serviceUserImpl.loadById(id).get());
+        if (myProfile.getClassrooms()==null)
+        {
+            myProfile.setClassrooms(serviceUserImpl.getTeacherClassrooms(id));
+        }
         if (myProfile != null) {
             return ResponseEntity.ok().body(myProfile);
         }

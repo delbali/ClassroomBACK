@@ -69,4 +69,9 @@ public class ServiceUserImpl implements ServiceUser {
 	{
 		return this.userRepository.findById(id);
 	}
+	public List<String> getTeacherClassrooms (Long id)
+	{
+		List<String> teacherClassrooms = new ArrayList<>();
+		return null;
+	}
 }
