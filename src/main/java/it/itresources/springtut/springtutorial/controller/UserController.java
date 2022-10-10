@@ -1,10 +1,13 @@
 package it.itresources.springtut.springtutorial.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import it.itresources.springtut.springtutorial.model.dto.UserProfileDTO;
+import it.itresources.springtut.springtutorial.services.impl.ServiceClassroomImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +29,11 @@ import it.itresources.springtut.springtutorial.services.impl.ServiceUserImpl;
 public class UserController {
 	
 	private final ServiceUserImpl serviceUserImpl;
-	
+	private final ServiceClassroomImpl serviceClassroomImpl;
 	@Autowired
-	public UserController (ServiceUserImpl serviceUserImpl)
+	public UserController (ServiceClassroomImpl serviceClassroomImpl, ServiceUserImpl serviceUserImpl)
 	{
+        this.serviceClassroomImpl=serviceClassroomImpl;
 		this.serviceUserImpl=serviceUserImpl;
 	}
 	
@@ -54,9 +58,14 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public ResponseEntity<?> getProfile(@PathVariable(value="id") Long id) {
         UserProfileDTO myProfile = UserMapper.entityToProfile(serviceUserImpl.loadById(id).get());
+        System.out.println("Preso il profile dell'user: "+myProfile.getUsername() + "con id: "+myProfile.getId()+ " e le sue classroom sono: "+ myProfile.getClassrooms());
         if (myProfile.getClassrooms()==null)
         {
-            myProfile.setClassrooms(serviceUserImpl.getTeacherClassrooms(id));
+            List<String> classrooms=new ArrayList<>();
+            serviceClassroomImpl.findByCreatedBy(myProfile.getUsername()).forEach(string->{
+                classrooms.add(string);
+            });
+            myProfile.setClassrooms(classrooms);
         }
         if (myProfile != null) {
             return ResponseEntity.ok().body(myProfile);

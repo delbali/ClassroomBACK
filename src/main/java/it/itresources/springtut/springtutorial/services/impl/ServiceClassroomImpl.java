@@ -106,4 +106,8 @@ public class ServiceClassroomImpl implements ServiceClassroom{
 	{
 		return this.classroomRepository.findByTitle(title).get().getId();
 	}
+
+	public List<String> findByCreatedBy (String createdBy)
+	{return this.classroomRepository.findByCreatedBy(createdBy);
+	}
 }

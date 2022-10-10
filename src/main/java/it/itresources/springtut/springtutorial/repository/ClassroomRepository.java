@@ -11,8 +11,10 @@ import java.util.Optional;
 
 @Repository
 public interface ClassroomRepository extends JpaRepository<ClassroomEntity, Long>{
-    @Query(value = "SELECT cla.title FROM CLASSROOMS as cla INNER JOIN USERS as us ON us.id = ?1", nativeQuery = true)
+    @Query(value = "SELECT cla.title FROM CLASSROOMS as cla INNER JOIN USERS as us ON us.id = ?", nativeQuery = true)
     List<String> findClassroomsByCreatorId(Long id);
 
+    @Query(value = "SELECT cla.title FROM CLASSROOMS as cla where cla.created_by=?", nativeQuery = true)
+    List<String> findByCreatedBy(String createdBy);
     Optional<ClassroomEntity> findByTitle(String title);
 }
