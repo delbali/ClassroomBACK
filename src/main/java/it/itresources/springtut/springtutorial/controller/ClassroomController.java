@@ -95,7 +95,20 @@ public class ClassroomController {
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not create the Classroom!");
 		}
 	}
-	
+	@PostMapping("/{title}")
+	@PreAuthorize("hasRole('ROLE_STUDENT')")
+	public ResponseEntity<?> getClassroomId(@Valid @RequestBody String title, @PathVariable(value="title") String titolo){
+
+		System.out.println("Loading classroom id from title");
+		Long id = serviceClassroomImpl.loadByTitle(title);
+
+		if(id!=null)
+		{
+			return ResponseEntity.ok().body(id);
+		}else {
+			return ResponseEntity.badRequest().build();
+		}
+	}
 	@PutMapping ("/{id}/members/{me}")
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
 	public ResponseEntity<?> addMe(@PathVariable(value = "id") Long id, @PathVariable(value = "me") Long myId)

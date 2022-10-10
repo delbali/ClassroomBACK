@@ -101,4 +101,9 @@ public class ServiceClassroomImpl implements ServiceClassroom{
 		
 		classroomRepository.deleteById(id);
 	}
+
+	public Long loadByTitle (String title)
+	{
+		return this.classroomRepository.findByTitle(title).get().getId();
+	}
 }

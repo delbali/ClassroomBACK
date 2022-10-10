@@ -71,7 +71,8 @@ public class ServiceUserImpl implements ServiceUser {
 	}
 	public List<String> getTeacherClassrooms (Long id)
 	{
-		List<String> teacherClassrooms = new ArrayList<>();
-		return null;
+		List<String> teacherClassrooms = classroomRepository.findClassroomsByCreatorId(id);
+		System.out.println(teacherClassrooms);
+	    return teacherClassrooms;
 	}
 }
