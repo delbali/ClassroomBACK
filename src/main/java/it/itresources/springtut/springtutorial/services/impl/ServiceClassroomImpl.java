@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import it.itresources.springtut.springtutorial.entity.GradeEntity;
+import it.itresources.springtut.springtutorial.repository.GradeRepository;
 import org.springframework.stereotype.Service;
 
 import it.itresources.springtut.springtutorial.model.*;
@@ -24,9 +26,10 @@ public class ServiceClassroomImpl implements ServiceClassroom{
 	
 	private final ClassroomRepository classroomRepository;
 	private final UserRepository userRepository;
-	
-	public ServiceClassroomImpl (UserRepository userRepository, ClassroomRepository classroomRepository)
+	private final GradeRepository gradeRepository;
+	public ServiceClassroomImpl (GradeRepository gradeRepository, UserRepository userRepository, ClassroomRepository classroomRepository)
 	{
+		this.gradeRepository=gradeRepository;
 		this.classroomRepository=classroomRepository;
 		this.userRepository=userRepository;
 	}
@@ -80,6 +83,12 @@ public class ServiceClassroomImpl implements ServiceClassroom{
 		System.out.println(myId);
 		if (user.getClassrooms()!=null)
 		{
+			System.out.println("LEVA STI GRADES");
+			user.getGrades().forEach(grade->{
+				System.out.println("LEVA STI GRADES PT2.");
+				gradeRepository.delete(grade);
+			});
+			user.setGrades(null);
 			user.getClassrooms().remove(entity);
 			userRepository.save(user);
 			System.out.println("ecchime"+entity.getSubscribers());

@@ -44,7 +44,7 @@ public class ClassroomEntity {
     List<DocumentEntity> uploads = new ArrayList<>();
 
     @OneToMany
-            (cascade = CascadeType.ALL,
+            (cascade = CascadeType.REMOVE,
                     fetch = FetchType.LAZY,
                     mappedBy = "classroom")
     List<GradeEntity> grades = new ArrayList<>();

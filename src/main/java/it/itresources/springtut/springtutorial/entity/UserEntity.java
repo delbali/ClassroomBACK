@@ -58,7 +58,7 @@ public class UserEntity {
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="creator")
     List<DocumentEntity> uploads = new ArrayList<>();
 
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="student")
+    @OneToMany(cascade=CascadeType.REMOVE, fetch=FetchType.LAZY, mappedBy="student")
     List<GradeEntity> grades = new ArrayList<>();
     
 	public String getAddress() {
