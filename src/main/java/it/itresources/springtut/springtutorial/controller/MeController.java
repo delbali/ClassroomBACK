@@ -46,6 +46,7 @@ public class MeController {
 	    @GetMapping("")
 	    public ResponseEntity<UserDTO> me() {
 	        logger.info("User request to get user information");
+			System.out.println("capire");
 	        SecurityContext securityContext = SecurityContextHolder.getContext();
 	        Authentication authentication = securityContext.getAuthentication();
 	        String username = PrincipalUtils.extractPrincipal(authentication);
