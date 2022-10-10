@@ -10,6 +10,7 @@ import it.itresources.springtut.springtutorial.entity.UserEntity;
 import it.itresources.springtut.springtutorial.model.UserDetailImpl;
 import it.itresources.springtut.springtutorial.model.dto.UserDTO;
 import it.itresources.springtut.springtutorial.model.dto.UserListDTO;
+import it.itresources.springtut.springtutorial.model.dto.UserProfileDTO;
 import it.itresources.springtut.springtutorial.model.request.UserRegistrationRequest;
 
 public class UserMapper {
@@ -67,5 +68,28 @@ public class UserMapper {
         String fullName=user.getFirstName()+" "+user.getLastName();
         System.out.println(fullName);
         return fullName;
+    }
+
+    public static UserProfileDTO entityToProfile(UserEntity user)
+    {
+        UserProfileDTO profile=new UserProfileDTO();
+        profile.setAddress(user.getAddress());
+        profile.setId(user.getId());
+        profile.setFirstName(user.getFirstName());
+        profile.setLastName(user.getLastName());
+        profile.setUsername(user.getUsername());
+        List<String> classrooms=new ArrayList<>();
+        user.getClassrooms().forEach(entity->{
+            classrooms.add(entity.getTitle());
+        });
+        profile.setClassrooms(classrooms);
+
+        List<String> roles=new ArrayList<>();
+        user.getRoles().forEach(entity->{
+            roles.add(entity.getName());
+        });
+
+        profile.setSubscriptionDate(DateMapper.dateToString(user.getSubscriptionDate()));
+        return profile;
     }
 }

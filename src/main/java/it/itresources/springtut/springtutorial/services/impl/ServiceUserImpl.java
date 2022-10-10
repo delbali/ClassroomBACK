@@ -16,6 +16,8 @@ import it.itresources.springtut.springtutorial.repository.ClassroomRepository;
 import it.itresources.springtut.springtutorial.repository.UserRepository;
 import it.itresources.springtut.springtutorial.services.ServiceUser;
 
+import javax.swing.text.html.Option;
+
 @Service
 public class ServiceUserImpl implements ServiceUser {
 
@@ -61,5 +63,10 @@ public class ServiceUserImpl implements ServiceUser {
 			}
 		}
 		return teacher;
+	}
+
+	public Optional<UserEntity> loadById (Long id)
+	{
+		return this.userRepository.findById(id);
 	}
 }
