@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import it.itresources.springtut.springtutorial.model.dto.UserDetailsDTO;
 import it.itresources.springtut.springtutorial.model.dto.UserProfileDTO;
 import it.itresources.springtut.springtutorial.services.impl.ServiceClassroomImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,4 +73,18 @@ public class UserController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/{id}/details")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    public ResponseEntity<?> getStudentDetails(@PathVariable(value="id") Long id) {
+        UserDetailsDTO studentDetails = UserMapper.entityToDetails(serviceUserImpl.loadById(id).get());
+        System.out.println("Presi i details dell'user: "+studentDetails.getUsername() + "con id: "+studentDetails.getId()+ " e le sue classroom sono: "+ studentDetails.getClassrooms());
+
+        if (studentDetails != null) {
+            return ResponseEntity.ok().body(studentDetails);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+
 }

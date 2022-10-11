@@ -8,9 +8,7 @@ import java.util.stream.Collectors;
 import it.itresources.springtut.springtutorial.entity.RoleEntity;
 import it.itresources.springtut.springtutorial.entity.UserEntity;
 import it.itresources.springtut.springtutorial.model.UserDetailImpl;
-import it.itresources.springtut.springtutorial.model.dto.UserDTO;
-import it.itresources.springtut.springtutorial.model.dto.UserListDTO;
-import it.itresources.springtut.springtutorial.model.dto.UserProfileDTO;
+import it.itresources.springtut.springtutorial.model.dto.*;
 import it.itresources.springtut.springtutorial.model.request.UserRegistrationRequest;
 
 public class UserMapper {
@@ -100,5 +98,30 @@ public class UserMapper {
         }
         profile.setSubscriptionDate(DateMapper.dateToString(user.getSubscriptionDate()));
         return profile;
+    }
+
+    public static UserDetailsDTO entityToDetails (UserEntity user)
+    {
+        UserDetailsDTO details=new UserDetailsDTO();
+
+        details.setFirstName(user.getFirstName());
+        details.setLastName(user.getLastName());
+        details.setId(user.getId());
+        details.setUsername(user.getUsername());
+
+
+        List<GradeDTO> grades = new ArrayList<>();
+        user.getGrades().forEach(entity->{
+            grades.add(GradeMapper.entityToDto(entity));
+        });
+        details.setGrades(grades);
+
+        List<String> classrooms=new ArrayList<>();
+        user.getClassrooms().forEach(entity->{
+            classrooms.add(entity.getTitle());
+        });
+        details.setClassrooms(classrooms);
+
+        return details;
     }
 }
