@@ -2,6 +2,7 @@ package it.itresources.springtut.springtutorial.mapper;
 
 import it.itresources.springtut.springtutorial.entity.GradeEntity;
 import it.itresources.springtut.springtutorial.model.dto.GradeDTO;
+import it.itresources.springtut.springtutorial.model.request.NewGradeRequest;
 
 public class GradeMapper {
 
@@ -14,4 +15,5 @@ public class GradeMapper {
         dto.setClassroom(null);
         return dto;
     }
+
 }
