@@ -1,5 +1,6 @@
 package it.itresources.springtut.springtutorial.services.impl;
 
+import it.itresources.springtut.springtutorial.entity.ClassroomEntity;
 import it.itresources.springtut.springtutorial.entity.GradeEntity;
 import it.itresources.springtut.springtutorial.mapper.UserMapper;
 import it.itresources.springtut.springtutorial.model.dto.GradeDTO;
@@ -9,6 +10,7 @@ import it.itresources.springtut.springtutorial.repository.ClassroomRepository;
 import it.itresources.springtut.springtutorial.repository.GradeRepository;
 import it.itresources.springtut.springtutorial.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,13 +38,24 @@ public class ServiceGradeImpl {
     public UserDetailsDTO assignGrades (NewGradeRequest request)
     {
         GradeEntity entity = new GradeEntity();
+
+        ClassroomEntity classroom = classroomRepository.getById(request.getClassroomId());
+
+
+        System.out.println("Settando il grade "+request.getNewGrade()+" per la classroom con id: "+request.getClassroomId());
+
         entity.setClassroom(classroomRepository.getById(request.getClassroomId()));
         entity.setGrade(request.getNewGrade());
         entity.setStudent(userRepository.getById(request.getStudentId()));
 
-        if (gradeRepository.save(entity)!=null)
+        classroom.getGrades().add(gradeRepository.save(entity));
+
+        if (classroomRepository.save(classroom)!=null)
         {
-            return UserMapper.entityToDetails(userRepository.getById(request.getStudentId()));
+            System.out.println("STO QUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            UserDetailsDTO toBeReturned = UserMapper.entityToDetails(userRepository.getById(request.getStudentId()));
+            System.out.println(toBeReturned.getGrades().get(0).getClassroom());
+            return toBeReturned;
         }
         else {
             return null;

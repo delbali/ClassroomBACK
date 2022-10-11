@@ -116,9 +116,9 @@ public class UserMapper {
         });
         details.setGrades(grades);
 
-        List<String> classrooms=new ArrayList<>();
+        List<ClassroomDTO> classrooms=new ArrayList<>();
         user.getClassrooms().forEach(entity->{
-            classrooms.add(entity.getTitle());
+            classrooms.add(ClassroomMapper.entityToDTO(entity));
         });
         details.setClassrooms(classrooms);
 

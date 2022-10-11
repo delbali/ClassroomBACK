@@ -17,7 +17,7 @@ public class UserDetailsDTO {
     @NotNull
     private String lastName;
 
-    private List<String> classrooms;
+    private List<ClassroomDTO> classrooms;
 
     private List<GradeDTO> grades;
 
@@ -53,11 +53,11 @@ public class UserDetailsDTO {
         this.lastName = lastName;
     }
 
-    public List<String> getClassrooms() {
+    public List<ClassroomDTO> getClassrooms() {
         return classrooms;
     }
 
-    public void setClassrooms(List<String> classrooms) {
+    public void setClassrooms(List<ClassroomDTO> classrooms) {
         this.classrooms = classrooms;
     }
 
@@ -72,7 +72,7 @@ public class UserDetailsDTO {
     public UserDetailsDTO() {
     }
 
-    public UserDetailsDTO(Long id, String username, String firstName, String lastName, List<String> classrooms, List<GradeDTO> grades) {
+    public UserDetailsDTO(Long id, String username, String firstName, String lastName, List<ClassroomDTO> classrooms, List<GradeDTO> grades) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
