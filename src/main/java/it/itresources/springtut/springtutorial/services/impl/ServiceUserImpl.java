@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import it.itresources.springtut.springtutorial.model.dto.UserProfileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +76,14 @@ public class ServiceUserImpl implements ServiceUser {
 		List<String> teacherClassrooms = classroomRepository.findClassroomsByCreatorId(id);
 		System.out.println(teacherClassrooms);
 	    return teacherClassrooms;
+	}
+
+	public UserProfileDTO updateUser(UserProfileDTO profile)
+	{
+		UserEntity user= userRepository.getById(profile.getId());
+		user.setUsername(profile.getUsername());
+		user.setFirstName(profile.getFirstName());
+		user.setLastName(profile.getLastName());
+		return UserMapper.entityToProfile(userRepository.save(user));
 	}
 }

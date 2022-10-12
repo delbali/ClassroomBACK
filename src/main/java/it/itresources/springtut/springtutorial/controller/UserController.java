@@ -86,5 +86,12 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
+    @PostMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public ResponseEntity<?> updateMe(@PathVariable(value="id") Long id, @Valid @RequestBody UserProfileDTO profile)
+    {
+        return ResponseEntity.ok().body(serviceUserImpl.updateUser(profile));
+    }
+
 
 }
