@@ -75,7 +75,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/details")
-    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
     public ResponseEntity<?> getStudentDetails(@PathVariable(value="id") Long id) {
         UserDetailsDTO studentDetails = UserMapper.entityToDetails(serviceUserImpl.loadById(id).get());
         System.out.println("Presi i details dell'user: "+studentDetails.getUsername() + "con id: "+studentDetails.getId()+ " e le sue classroom sono: "+ studentDetails.getClassrooms());
