@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import it.itresources.springtut.springtutorial.model.dto.UserProfileDTO;
+import it.itresources.springtut.springtutorial.model.request.PasswordUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import it.itresources.springtut.springtutorial.entity.ClassroomEntity;
@@ -26,8 +28,10 @@ public class ServiceUserImpl implements ServiceUser {
 	private final UserRepository userRepository;
 	private final ClassroomRepository classroomRepository;
 
+	private final PasswordEncoder encoder;
 	@Autowired
-	public ServiceUserImpl(ClassroomRepository classroomRepository, UserRepository userRepository) {
+	public ServiceUserImpl(PasswordEncoder encoder, ClassroomRepository classroomRepository, UserRepository userRepository) {
+		this.encoder=encoder;
 		this.userRepository = userRepository;
 		this.classroomRepository = classroomRepository;
 	}
@@ -85,5 +89,18 @@ public class ServiceUserImpl implements ServiceUser {
 		user.setFirstName(profile.getFirstName());
 		user.setLastName(profile.getLastName());
 		return UserMapper.entityToProfile(userRepository.save(user));
+	}
+
+	public Boolean updatePassword (PasswordUpdateRequest request, UserEntity user)
+	{
+		if(encoder.matches(request.getOldPassword(), user.getPassword()))
+		{
+			System.out.println("Passwords match");
+			user.setPassword(encoder.encode(request.getNewPassword()));
+			userRepository.save(user);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
