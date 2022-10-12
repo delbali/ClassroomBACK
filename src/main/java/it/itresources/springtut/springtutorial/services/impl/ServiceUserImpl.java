@@ -88,6 +88,7 @@ public class ServiceUserImpl implements ServiceUser {
 		user.setUsername(profile.getUsername());
 		user.setFirstName(profile.getFirstName());
 		user.setLastName(profile.getLastName());
+		user.setAddress(profile.getAddress());
 		return UserMapper.entityToProfile(userRepository.save(user));
 	}
 
