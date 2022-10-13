@@ -94,9 +94,11 @@ public class ClassroomController {
 			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Could not create the Classroom!");
 		}
 	}
-	@PostMapping("/{title}")
+
+	/* sistemare */
+	@PatchMapping("")
 	@PreAuthorize("hasRole('ROLE_STUDENT')")
-	public ResponseEntity<?> getClassroomId(@Valid @RequestBody String title, @PathVariable(value="title") String titolo){
+	public ResponseEntity<?> getClassroomId(@Valid @RequestBody String title){
 
 		System.out.println("Loading classroom id from title");
 		Long id = serviceClassroomImpl.loadByTitle(title);

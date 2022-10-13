@@ -35,7 +35,8 @@ public class JwtTokenAuthOncePerRequestFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         logger.debug("executing JWT per request Filter");
         String jwt = parseJwtFromRequest(httpServletRequest);
-    System.out.println("jwt"+ jwt);
+
+        System.out.println("jwt"+ jwt);
         if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
             String username = jwtUtils.getUsernameFromToken(jwt);
 
@@ -51,12 +52,13 @@ public class JwtTokenAuthOncePerRequestFilter extends OncePerRequestFilter {
     }
 
     private String parseJwtFromRequest(HttpServletRequest request) {
+
         String authHeader = request.getHeader(AUTH_HEADER);
 
         if (StringUtils.hasText(authHeader) && authHeader.startsWith(BEARER)) {
             return authHeader.substring(BEARER.length()+1);
         }
-
         return null;
     }
+
 }
