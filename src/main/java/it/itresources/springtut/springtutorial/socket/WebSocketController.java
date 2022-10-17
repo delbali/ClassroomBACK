@@ -28,12 +28,15 @@ public class WebSocketController {
     @MessageMapping("/message")
     @SendTo("/topic/reply")
     public String processMessageFromClient(@Payload String message) throws Exception {
+        System.out.println("Messaggio (controller del ws");
         String name = new Gson().fromJson(message, Map.class).get("name").toString();
+        System.out.println(name);
         return name;
     }
 
     @MessageExceptionHandler
     public String handleException(Throwable exception) {
+        System.out.println("Eccezione");
         messagingTemplate.convertAndSend("/errors", exception.getMessage());
         return exception.getMessage();
     }

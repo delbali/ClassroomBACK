@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import it.itresources.springtut.springtutorial.security.PrincipalUtils;
 import it.itresources.springtut.springtutorial.services.impl.ServiceRoleImpl;
@@ -119,6 +120,5 @@ public class AuthController {
 		}
 		return ResponseEntity.badRequest().body("Invalid Token");
 	}
-
 
 }
