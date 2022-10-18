@@ -10,7 +10,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 import com.google.gson.Gson;
-
 import org.springframework.stereotype.Controller;
 
 
@@ -30,8 +29,10 @@ public class WebSocketController {
     public String processMessageFromClient(@Payload String message) throws Exception {
         System.out.println("Messaggio (controller del ws");
         String name = new Gson().fromJson(message, Map.class).get("name").toString();
-        System.out.println(name);
-        return name;
+        String chat= new Gson().fromJson(message, Map.class).get("message").toString();
+        System.out.println(name+": "+chat);
+
+        return name+": "+chat;
     }
 
     @MessageExceptionHandler
@@ -41,4 +42,19 @@ public class WebSocketController {
         return exception.getMessage();
     }
 
+
+    /*  @PostMapping ("/message/{id}")
+    public ResponseEntity<?> processMessageFromClient(@Payload String message, @PathVariable(value = "id") Long classroomId) throws Exception {
+        System.out.println("Messaggio (controller del ws");
+        String chat= new Gson().fromJson(message, Map.class).get("name").toString()+": "+new Gson().fromJson(message, Map.class).get("message").toString();
+        System.out.println(chat);
+        this.serviceSocket.sendMessageToLocation(chat, classroomId);
+        return ResponseEntity.ok().build();
+    }
+
+    @MessageExceptionHandler
+    public String handleException(Throwable exception) {
+        System.out.println("Eccezione");
+        return serviceSocket.exceptionHandler(exception);
+    }*/
 }
