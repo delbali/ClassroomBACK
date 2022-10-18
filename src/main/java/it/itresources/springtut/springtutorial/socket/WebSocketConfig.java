@@ -39,7 +39,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketConfig.class);
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl customUserServiceDetails;
-
     private static final String BEARER = "Bearer";
 
 
